@@ -92,11 +92,11 @@ Open questions that surfaced and are parked until the current card closes.
 
 ### T-012 · Does the skill pass a second misread case?
 
-**Status:** open
+**Status:** answered
 **Parent:** T-008
 **Opened:** 2026-11-27
 **Question:** One pass (KnowledgeSmith) is one data point; RippleBench or Forgetting is Not Erasure from edit-slice would show whether it generalises.
-**Answer:** —
+**Answer:** Yes, on the RippleBench case: all seven checks passed, quick mode included, and its reading beat the answer key, which inherited a wrong edit-slice correction; missed MQuAKE. 6.7 min, $1.28. `backtests/T-012/result.md`.
 
 ### T-013 · Does the skill need a quick mode for checks only the owner reads?
 
@@ -105,3 +105,27 @@ Open questions that surfaced and are parked until the current card closes.
 **Opened:** 2026-11-27
 **Question:** For self use the skill still ends in positioning.md plus a legibility census; the backtest's quick check reached the right answer in 7.4 min for $1.52 without them. Should those steps run only when someone else will read the result?
 **Answer:** Yes. The skill now runs quick by default when only the owner reads the result (12–20 queries, three sources, one citation hop, no positioning or census) and full when someone else will; verdict rules are identical in both. `skill/scoop-check/SKILL.md`, "Quick or full".
+
+### T-014 · Edit-slice's RippleBench correction is itself wrong
+
+**Status:** open
+**Parent:** T-012
+**Opened:** 2026-11-27
+**Question:** The 2026-10-03 correction says RippleBench "advertises no such pluggability"; v2 and v3 name knowledge-graph path length as a pluggable distance (never run). Fix the entry in `~/code/open-concept-lab/ai/edit-slice/CLAUDE.md`? Needs the owner's OK (other project).
+**Answer:** —
+
+### T-015 · Should `scope` record which paper version a verdict read?
+
+**Status:** open
+**Parent:** T-012
+**Opened:** 2026-11-27
+**Question:** The full-text cache and verdicts store no arXiv version, and in T-012 the version decided the answer (v1 lacks the wording v2/v3 have). Record the version at fetch time and in each verdict?
+**Answer:** —
+
+### T-016 · How should a check catch retrieved-but-unjudged near papers?
+
+**Status:** open
+**Parent:** T-012
+**Opened:** 2026-11-27
+**Question:** MQuAKE was in the T-012 KB but never judged; should closing a check require a pass over `scope hits --unjudged` with the slot screens?
+**Answer:** —

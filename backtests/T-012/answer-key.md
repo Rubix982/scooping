@@ -25,3 +25,18 @@ boundary ("does propagation of the intended edit to k-hop questions count as spr
 the owner. Also near: RippleEdits (hop-structured test types, no graded path-length curve),
 EditPropBench (2605.02083; dependency-labelled cascades, but manuscripts and LLM editors, not
 weights), CodePlan (2309.12499; change impact in software engineering, no model editing).
+
+## Correction after grading (2026-11-27)
+
+Check 2 was wrong, and so is the edit-slice correction it was built from. RippleBench v2
+(17 Jun 2026) and v3 (14 Jul 2026) do advertise a pluggable distance and name
+knowledge-graph path length as one option, four times in v3: "The framework is agnostic
+to the choice of distance function: knowledge-graph path length is one valid
+instantiation, but so are RAG rank and embedding cosine similarity" (§2), and again in
+§3.1, §3.2 and the conclusion. v1 (3 Dec 2025) mentions path length once, without the
+pluggability wording. The edit-slice correction is dated 2026-10-03, after v3, so it
+misread the current version (or read v1). What the paper does not do is run path length:
+"We use cosine similarity of bge-base embeddings as our default distance" (§3.3). The
+right reading, which the test session gave: the option is named, never run, and the
+evaluated methods are topic unlearning, not single-fact edits. The original note was half
+right; the correction was half wrong.
