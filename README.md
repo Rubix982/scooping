@@ -50,3 +50,8 @@ ln -s ~/code/scooping/skill/scoop-check ~/.claude/skills/scoop-check
 
 Downloaded pages are cached under `kb/cache/`; they are treated as untrusted data and only
 parsed.
+
+## License
+
+AGPL-3.0-or-later (`LICENSE`). If you distribute a modified version, or run one as a
+network service for others, you must release its source under the same license.
