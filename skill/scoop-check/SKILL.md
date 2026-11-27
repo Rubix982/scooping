@@ -76,6 +76,8 @@ and record those with `scope logq` and `scope add`. Run `scope <command> -h` for
 | record a verdict | `scope verdict <slug> <id> --version vN --s1 … --s4 … --verdict same\|overlaps\|different --read methods\|light --quote "S2: …"` |
 | outside finds | `scope add <slug> --title … --url …`, `scope logq <slug> --source websearch --query … --n …` |
 | progress, files | `scope status <slug>`, `scope report <slug>` (writes `search-log.generated.md`, `verdicts.generated.md`) |
+| PDF only reachable in a browser | user saves it under `~/code/scooping/notes/` → `scope grep <id> --file notes/<name>.pdf --terms …` |
+| fold another knowledge base in | `scope merge <other.duckdb>` (renumbers queries; safe to rerun) |
 
 The screen regex is the main token control: write it from the slot terms. Repeat
 `--screen` to require several at once (one per slot works well). Put word boundaries on

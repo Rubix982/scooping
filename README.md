@@ -22,8 +22,9 @@ confirmed, the claim is restated around what the matching paper cannot do.
 - The first check (interpretability of agent decisions against planted ground truth) lives
   at the root: `claim.md`, `verdicts.md`, `search-log.md`, `positioning.md`, `CARD.md`,
   `threads.md`, `recall/`.
-- `backtests/`: the skill tested on a case with a known answer (`T-008/`: prompt, answer key,
-  graded result).
+- `backtests/`: the skill tested on cases with known answers (`T-008/`, `T-012/`: prompt,
+  answer key, graded result). Run a backtest against a fresh knowledge base
+  (`SCOPE_DB=kb/backtest-<id>.duckdb`): the main one already holds the answers.
 
 ## Sources `scope` can search
 

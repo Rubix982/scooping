@@ -2,41 +2,41 @@
 
 | q | when | source | query | params | results | new | shown | HTTP |
 |---|---|---|---|---|---|---|---|---|
-| 1 | 2026-11-27 23:04 | arxiv | ripple effect knowledge editing | field=abstract | 11 | 11 | 11 | 200 |
-| 2 | 2026-11-27 23:04 | arxiv | knowledge editing degree knowledge graph | field=abstract | 8 | 8 | 8 | 200 |
-| 3 | 2026-11-27 23:04 | arxiv | model editing hub entity connected | field=abstract | 0 | 0 | 0 | 200 |
-| 4 | 2026-11-27 23:04 | arxiv | knowledge editing ripple predict | field=abstract | 1 | 0 | 0 | 200 |
-| 5 | 2026-11-27 23:04 | arxiv | knowledge editing graph structure propagation | field=abstract | 6 | 4 | 4 | 200 |
-| 6 | 2026-11-27 23:04 | arxiv | locate-then-edit side effects related facts | field=abstract | 0 | 0 | 0 | 200 |
-| 7 | 2026-11-27 23:04 | arxiv | knowledge editing entity popularity | field=abstract | 1 | 1 | 1 | 200 |
-| 8 | 2026-11-27 23:05 | arxiv | knowledge editing interconnected facts centrality | field=abstract | 0 | 0 | 0 | 200 |
-| 9 | 2026-11-27 23:05 | arxiv | entity degree model editing | field=abstract | 3 | 1 | 1 | 200 |
-| 10 | 2026-11-27 23:05 | arxiv | knowledge editing node degree | field=abstract | 2 | 0 | 0 | 200 |
-| 11 | 2026-11-27 23:05 | arxiv | edit spillover structural properties knowledge graph | field=abstract | 0 | 0 | 0 | 200 |
-| 12 | 2026-11-27 23:06 | arxiv | fan-out knowledge editing | field=abstract | 0 | 0 | 0 | 200 |
-| 13 | 2026-11-27 23:06 | arxiv | knowledge editing dependent facts number | field=abstract | 1 | 1 | 0 | 200 |
-| 14 | 2026-11-27 23:06 | acl | (knowledge/model) edit.{0,200}(out-degree/node degree/entity degree/\bdegree\b/hub/centrality)/(out-degree/node degree/entity degree/centrality/hub).{0,200}(knowledge/model) edit | year>=2022 | 14 | 14 | 14 | 200 |
-| 15 | 2026-11-27 23:06 | s2-cites | 2510.02392 |  | 6 | 6 | 0 | 200 |
-| 16 | 2026-11-27 23:06 | s2-cites | 2505.19286 |  | 0 | 0 | 0 | 200 |
-| 17 | 2026-11-27 23:06 | s2-cites | 2606.01610 |  | 0 | 0 | 0 | 200 |
-| 18 | 2026-11-27 23:07 | s2-cites | 2307.12976 |  | 372 | 358 | 41 | 200 |
-| 19 | 2026-11-27 23:07 | s2-cites | 2407.12828 |  | 26 | 13 | 0 | 200 |
-| 20 | 2026-11-27 23:09 | s2-cites | 2609.08067 |  | 0 | 0 | 0 | 200 |
-| 21 | 2026-11-27 23:44 | arxiv-author | Yu-Ji Zhang | since=2601 | 5 | 5 | 0 | 200 |
-| 22 | 2026-11-27 23:44 | arxiv-author | Heng Ji | since=2601 | 50 | 50 | 0 | 200 |
-| 23 | 2026-11-27 23:44 | arxiv-author | Cheng-Xiang Zhai | since=2601 | 0 | 0 | 0 | 200 |
-| 24 | 2026-11-27 23:44 | arxiv-author | Yinyi Luo | since=2601 | 16 | 15 | 2 | 200 |
-| 25 | 2026-11-27 23:45 | arxiv-author | Jindong Wang | since=2601 | 50 | 40 | 1 | 200 |
-| 26 | 2026-11-27 23:45 | arxiv-author | Roi Cohen | since=2601 | 21 | 18 | 0 | 200 |
-| 27 | 2026-11-27 23:45 | arxiv-author | Mor Geva | since=2601 | 50 | 43 | 0 | 200 |
-| 28 | 2026-11-27 23:45 | arxiv-author | Amir Globerson | since=2601 | 50 | 42 | 0 | 200 |
-| 29 | 2026-11-27 23:45 | arxiv-author | Haoben Huang | since=2601 | 1 | 0 | 0 | 200 |
-| 30 | 2026-11-27 23:45 | arxiv-author | Ou Wu | since=2601 | 50 | 50 | 0 | 200 |
-| 31 | 2026-11-27 23:45 | arxiv-author | Manit Baser | since=2601 | 11 | 7 | 0 | 200 |
-| 32 | 2026-11-27 23:45 | openreview | knowledge editing | group=ICLR.cc/2027/Conference | 100 | 97 | 32 | 200 |
-| 33 | 2026-11-27 23:45 | openreview | model editing ripple | group=ICLR.cc/2027/Conference | 100 | 47 | 7 | 200 |
-| 34 | 2026-11-27 23:45 | openreview | edit propagation | group=ICLR.cc/2027/Conference | 100 | 90 | 14 | 200 |
-| 35 | 2026-11-27 23:45 | openalex | "knowledge editing" degree | from=2025-01-01 | 1 | 1 | 1 | 200 |
-| 36 | 2026-11-27 23:46 | openalex | "knowledge editing" "ripple effect" | from=2025-01-01 | 3 | 0 | 0 | 200 |
-| 37 | 2026-11-27 23:46 | openalex | "model editing" popularity | from=2025-01-01 | 1 | 0 | 0 | 200 |
-| 38 | 2026-11-27 23:46 | s2-cites | 2603.19297 |  | 2 | 0 | 0 | 200 |
+| 18 | 2026-11-27 23:04 | arxiv | ripple effect knowledge editing | field=abstract | 11 | 11 | 11 | 200 |
+| 19 | 2026-11-27 23:04 | arxiv | knowledge editing degree knowledge graph | field=abstract | 8 | 8 | 8 | 200 |
+| 20 | 2026-11-27 23:04 | arxiv | model editing hub entity connected | field=abstract | 0 | 0 | 0 | 200 |
+| 21 | 2026-11-27 23:04 | arxiv | knowledge editing ripple predict | field=abstract | 1 | 0 | 0 | 200 |
+| 22 | 2026-11-27 23:04 | arxiv | knowledge editing graph structure propagation | field=abstract | 6 | 4 | 4 | 200 |
+| 23 | 2026-11-27 23:04 | arxiv | locate-then-edit side effects related facts | field=abstract | 0 | 0 | 0 | 200 |
+| 24 | 2026-11-27 23:04 | arxiv | knowledge editing entity popularity | field=abstract | 1 | 1 | 1 | 200 |
+| 25 | 2026-11-27 23:05 | arxiv | knowledge editing interconnected facts centrality | field=abstract | 0 | 0 | 0 | 200 |
+| 26 | 2026-11-27 23:05 | arxiv | entity degree model editing | field=abstract | 3 | 1 | 1 | 200 |
+| 27 | 2026-11-27 23:05 | arxiv | knowledge editing node degree | field=abstract | 2 | 0 | 0 | 200 |
+| 28 | 2026-11-27 23:05 | arxiv | edit spillover structural properties knowledge graph | field=abstract | 0 | 0 | 0 | 200 |
+| 29 | 2026-11-27 23:06 | arxiv | fan-out knowledge editing | field=abstract | 0 | 0 | 0 | 200 |
+| 30 | 2026-11-27 23:06 | arxiv | knowledge editing dependent facts number | field=abstract | 1 | 1 | 0 | 200 |
+| 31 | 2026-11-27 23:06 | acl | (knowledge/model) edit.{0,200}(out-degree/node degree/entity degree/\bdegree\b/hub/centrality)/(out-degree/node degree/entity degree/centrality/hub).{0,200}(knowledge/model) edit | year>=2022 | 14 | 14 | 14 | 200 |
+| 32 | 2026-11-27 23:06 | s2-cites | 2510.02392 |  | 6 | 6 | 0 | 200 |
+| 33 | 2026-11-27 23:06 | s2-cites | 2505.19286 |  | 0 | 0 | 0 | 200 |
+| 34 | 2026-11-27 23:06 | s2-cites | 2606.01610 |  | 0 | 0 | 0 | 200 |
+| 35 | 2026-11-27 23:07 | s2-cites | 2307.12976 |  | 372 | 358 | 41 | 200 |
+| 36 | 2026-11-27 23:07 | s2-cites | 2407.12828 |  | 26 | 13 | 0 | 200 |
+| 37 | 2026-11-27 23:09 | s2-cites | 2609.08067 |  | 0 | 0 | 0 | 200 |
+| 38 | 2026-11-27 23:44 | arxiv-author | Yu-Ji Zhang | since=2601 | 5 | 5 | 0 | 200 |
+| 39 | 2026-11-27 23:44 | arxiv-author | Heng Ji | since=2601 | 50 | 50 | 0 | 200 |
+| 40 | 2026-11-27 23:44 | arxiv-author | Cheng-Xiang Zhai | since=2601 | 0 | 0 | 0 | 200 |
+| 41 | 2026-11-27 23:44 | arxiv-author | Yinyi Luo | since=2601 | 16 | 15 | 2 | 200 |
+| 42 | 2026-11-27 23:45 | arxiv-author | Jindong Wang | since=2601 | 50 | 40 | 1 | 200 |
+| 43 | 2026-11-27 23:45 | arxiv-author | Roi Cohen | since=2601 | 21 | 18 | 0 | 200 |
+| 44 | 2026-11-27 23:45 | arxiv-author | Mor Geva | since=2601 | 50 | 43 | 0 | 200 |
+| 45 | 2026-11-27 23:45 | arxiv-author | Amir Globerson | since=2601 | 50 | 42 | 0 | 200 |
+| 46 | 2026-11-27 23:45 | arxiv-author | Haoben Huang | since=2601 | 1 | 0 | 0 | 200 |
+| 47 | 2026-11-27 23:45 | arxiv-author | Ou Wu | since=2601 | 50 | 50 | 0 | 200 |
+| 48 | 2026-11-27 23:45 | arxiv-author | Manit Baser | since=2601 | 11 | 7 | 0 | 200 |
+| 49 | 2026-11-27 23:45 | openreview | knowledge editing | group=ICLR.cc/2027/Conference | 100 | 97 | 32 | 200 |
+| 50 | 2026-11-27 23:45 | openreview | model editing ripple | group=ICLR.cc/2027/Conference | 100 | 47 | 7 | 200 |
+| 51 | 2026-11-27 23:45 | openreview | edit propagation | group=ICLR.cc/2027/Conference | 100 | 90 | 14 | 200 |
+| 52 | 2026-11-27 23:45 | openalex | "knowledge editing" degree | from=2025-01-01 | 1 | 1 | 1 | 200 |
+| 53 | 2026-11-27 23:46 | openalex | "knowledge editing" "ripple effect" | from=2025-01-01 | 3 | 0 | 0 | 200 |
+| 54 | 2026-11-27 23:46 | openalex | "model editing" popularity | from=2025-01-01 | 1 | 0 | 0 | 200 |
+| 55 | 2026-11-27 23:46 | s2-cites | 2603.19297 |  | 2 | 0 | 0 | 200 |

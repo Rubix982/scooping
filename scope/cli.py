@@ -7,6 +7,7 @@ Run `scope -h` or `scope <command> -h`. Every search is logged with its counts.
 import argparse
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -166,14 +167,18 @@ def cmd_abstract(a):
 def cmd_grep(a):
     con = db.connect()
     pid = norm_id(a.id)
-    if not pid.startswith('arxiv:'):
+    if not pid.startswith('arxiv:') and not a.file:
         print(f'{pid}: full text is only fetched for arXiv papers; for others ask the user for the PDF and use --file')
-        if not a.file:
-            return
+        return
     m = re.search(r'(v\d+)$', a.id.strip())
     want = a.paper_version or (m.group(1) if m else '')
     if a.file:
         path, how, ver = a.file, 'file', want or 'unknown'
+        if path.lower().endswith('.pdf'):  # a PDF the user saved from a browser (OpenReview, Preprints.org)
+            out = os.path.join(db.CACHE, 'files', re.sub(r'\W', '_', pid) + '.txt')
+            os.makedirs(os.path.dirname(out), exist_ok=True)
+            subprocess.run(['pdftotext', '-layout', path, out], check=False, capture_output=True)
+            path, how = (out, 'pdf file') if os.path.exists(out) else (None, 'pdftotext failed')
     else:
         path, how, ver = sources.arxiv_fulltext(pid[6:], db.CACHE, want, a.refresh)
     if not path:
@@ -278,6 +283,46 @@ def cmd_report(a):
     print(f'wrote {len(qs)} queries and {len(vs)} verdicts to {d}/search-log.generated.md and verdicts.generated.md')
 
 
+def cmd_merge(a):
+    """Copy another knowledge base into this one: papers, authors, checks, queries (renumbered),
+    hits, seen marks, verdicts and reads. Safe to rerun: rows already present are skipped."""
+    con = db.connect()
+    src = os.path.abspath(a.other)
+    if src == os.path.abspath(db.DB_PATH):
+        sys.exit('cannot merge a knowledge base into itself')
+    con.execute(f"ATTACH '{src}' AS o (READ_ONLY)")
+    cols = lambda t: [r[0] for r in con.execute("SELECT column_name FROM duckdb_columns() WHERE database_name = 'o' AND table_name = ?", [t]).fetchall()]
+    count = lambda t: con.execute(f'SELECT count(*) FROM {t}').fetchone()[0]
+    tables = ('papers', 'authors', 'paper_authors', 'checks', 'queries', 'query_hits', 'seen', 'verdicts', 'reads')
+    before = {t: count(t) for t in tables}
+    con.execute("INSERT OR IGNORE INTO papers (id, arxiv_id, openreview_id, doi, title, abstract, published, venue, source, url, ingested_at) "
+                "SELECT id, arxiv_id, openreview_id, doi, title, abstract, published, venue, source, url, ingested_at FROM o.papers")
+    con.execute("UPDATE papers SET abstract = op.abstract FROM o.papers op WHERE papers.id = op.id "
+                "AND (papers.abstract IS NULL OR papers.abstract = '') AND coalesce(op.abstract, '') <> ''")
+    con.execute("INSERT OR IGNORE INTO authors SELECT id, name, orcid FROM o.authors")
+    con.execute("INSERT OR IGNORE INTO paper_authors SELECT paper_id, author_id, position, institution FROM o.paper_authors")
+    con.execute("INSERT OR IGNORE INTO checks SELECT slug, dir, created_at FROM o.checks")
+    con.execute("CREATE TEMP TABLE qmap (old INTEGER, new INTEGER)")
+    for r in con.execute("SELECT qid, check_slug, source, query, params, n_results, n_new, n_shown, status, run_at FROM o.queries ORDER BY qid").fetchall():
+        hit = con.execute("SELECT qid FROM queries WHERE check_slug = ? AND source = ? AND query = ? AND run_at = ?", [r[1], r[2], r[3], r[9]]).fetchone()
+        new = hit[0] if hit else con.execute(
+            "INSERT INTO queries (check_slug, source, query, params, n_results, n_new, n_shown, status, run_at) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING qid", list(r[1:])).fetchone()[0]
+        con.execute("INSERT INTO qmap VALUES (?, ?)", [r[0], new])
+    con.execute("INSERT OR IGNORE INTO query_hits SELECT m.new, h.paper_id FROM o.query_hits h JOIN qmap m ON m.old = h.qid")
+    con.execute("INSERT OR IGNORE INTO seen SELECT s.check_slug, s.paper_id, coalesce('q' || m.new, s.how), s.first_seen "
+                "FROM o.seen s LEFT JOIN qmap m ON s.how = 'q' || m.old")
+    vc = [c for c in ('check_slug', 'version', 'paper_id', 's1', 's2', 's3', 's4', 'verdict', 'read_level', 'quotes', 'note', 'decided_at', 'paper_version') if c in cols('verdicts')]
+    con.execute(f"INSERT OR IGNORE INTO verdicts ({', '.join(vc)}) SELECT {', '.join(vc)} FROM o.verdicts")
+    if cols('reads'):
+        con.execute("INSERT INTO reads SELECT r.paper_id, r.paper_version, r.how, r.read_at FROM o.reads r WHERE NOT EXISTS "
+                    "(SELECT 1 FROM reads x WHERE x.paper_id = r.paper_id AND x.read_at = r.read_at)")
+    added = {t: count(t) - before[t] for t in tables}
+    slugs = [r[0] for r in con.execute("SELECT slug FROM o.checks").fetchall()]
+    print(f"merged {os.path.basename(src)} (checks: {', '.join(slugs) or '-'}): "
+          + ', '.join(f'+{n} {t}' for t, n in added.items()))
+
+
 def cmd_import_ids(a):
     con = db.connect()
     ids = sorted(set(re.findall(r'\b\d{4}\.\d{4,5}\b', open(a.file).read())))
@@ -337,7 +382,7 @@ def main(argv=None):
 
     g = sub.add_parser('grep', help='sentences in the full text matching slot terms, with section headings')
     g.add_argument('id'); g.add_argument('--terms', required=True); g.add_argument('--max', type=int, default=8)
-    g.add_argument('--width', type=int, default=300); g.add_argument('--file', help='local text file instead of fetching')
+    g.add_argument('--width', type=int, default=300); g.add_argument('--file', help='local text or PDF file instead of fetching (e.g. a PDF saved from OpenReview)')
     g.add_argument('--paper-version', help="read a specific arXiv version, e.g. v1 (or write the id as 2512.04144v1); default: latest")
     g.add_argument('--refresh', action='store_true', help='refetch even if cached (a newer version may exist)')
     g.set_defaults(f=cmd_grep)
@@ -363,6 +408,9 @@ def main(argv=None):
     r.set_defaults(f=cmd_report)
     im = sub.add_parser('import-ids', help='mark every arXiv id found in a file as seen'); im.add_argument('slug'); im.add_argument('file')
     im.set_defaults(f=cmd_import_ids)
+
+    mg = sub.add_parser('merge', help='copy another knowledge base (papers, checks, queries, verdicts) into this one; safe to rerun')
+    mg.add_argument('other', help='path to the other .duckdb file'); mg.set_defaults(f=cmd_merge)
 
     ad = sub.add_parser('add', help='record a paper or post found outside the CLI'); ad.add_argument('slug')
     ad.add_argument('--title', required=True); ad.add_argument('--url'); ad.add_argument('--source', default='web')

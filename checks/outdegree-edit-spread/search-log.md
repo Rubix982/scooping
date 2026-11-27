@@ -22,8 +22,9 @@ This was a quick check (20 logged queries, 2026-11-27), run to keep token use lo
 
 ## Coverage passes (T-011, 2026-11-27)
 
-Queries q24–q38 in the knowledge base (`kb/backtest.duckdb`; `scope report` writes them to
-`search-log.generated.md`).
+Queries q24–q38 in `kb/backtest.duckdb`. On 2026-11-28 that knowledge base was merged into
+the main one (`scope merge`), which renumbers queries; `search-log.generated.md` has the
+current numbers.
 - People: arXiv listings since 2026-01 of 11 authors of the five nearest papers
   (`recall/authors-nearest.txt`). Nothing on the claim.
 - Venues: OpenReview ICLR 2027 submissions, three queries (knowledge editing, model editing
