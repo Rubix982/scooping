@@ -85,6 +85,10 @@ arXiv abstract queries, 4 OpenReview queries) found nothing new beyond Goal-Drif
 records new to the check; 4 more overlaps recorded, none meeting all four slots. Count
 becomes 0 of 65. See `search-log.md`, coverage pass 4.
 
+**Addendum (2026-11-28).** LTS read from the PDF the owner saved: a fixed frozen extractor
+(Qwen2.5-7B-Instruct) reads trajectories produced by other agents, so it misses S3, as
+ReCast does. Count: 0 of 66, with nothing left unresolved.
+
 ---
 
 # CLOSED CARDS

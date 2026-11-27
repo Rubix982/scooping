@@ -135,7 +135,7 @@ def arxiv_fulltext(aid, cache_dir, version='', refresh=False):
     code, body = _get('https://arxiv.org/pdf/' + aid + version)
     if code == 200 and body[:4] == b'%PDF':
         pdf = os.path.join(d, 'paper.pdf'); open(pdf, 'wb').write(body)
-        subprocess.run(['pdftotext', '-layout', pdf, path], check=False, capture_output=True)
+        subprocess.run(['pdftotext', pdf, path], check=False, capture_output=True)
         if os.path.exists(path):
             v = version or arxiv_latest_version(aid)
             open(vfile, 'w').write(v)

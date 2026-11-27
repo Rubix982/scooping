@@ -19,3 +19,7 @@
 | 15 | 2026-11-27 22:57 | openalex | "hidden states" agent "failure" | from=2025-01-01 | 35 | 27 | 25 | 200 |
 | 16 | 2026-11-27 22:57 | openalex | "mechanistic interpretability" agent | from=2025-01-01 | 163 | 137 | 75 | 200 |
 | 17 | 2026-11-27 22:57 | openalex | "probing" "agent" "tool" | from=2025-01-01 | 200 | 181 | 176 | 200 |
+| 73 | 2026-11-28 00:03 | arxiv | Latent Trajectory Synthesis | field=title | 1 | 0 | 0 | 200 |
+| 74 | 2026-11-28 00:03 | arxiv | latent trajectory failure attribution | field=abstract | 13 | 10 | 10 | 200 |
+| 75 | 2026-11-28 00:03 | arxiv | step-level representations failure attribution agent | field=abstract | 6 | 2 | 2 | 200 |
+| 76 | 2026-11-28 00:03 | openreview | Latent Trajectory Synthesis | group=None | 100 | 82 | 82 | 200 |

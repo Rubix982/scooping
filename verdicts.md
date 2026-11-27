@@ -23,6 +23,12 @@ openalex:W7164739120 "Felt, Not Granted" (internal probe vs LLM judge on each pr
 action), openalex:W7163149144 "No Better Than Behavioral" (residual stream vs tool entropy,
 nothing planted). Quotes in `verdicts.generated.md`. Count: 0 of 65.
 
+**LTS resolved (2026-11-28):** read from the submission PDF. S1 yes (six public trajectory
+sets), S2 yes (replay against "a known injected fault step"), S3 **no** ("We use
+Qwen2.5-7B-Instruct as the frozen latent extractor", a reader of other agents' runs), S4
+yes (detection and localization). An overlap of ReCast's kind; it joins the reader
+baselines. Count: 0 of 66, nothing unresolved.
+
 Nearest work by the slot it misses:
 
 | Paper | S1 | S2 planted step | S3 agent's own internals | S4 scored on the step | Comparison arm in the paper | Misses |

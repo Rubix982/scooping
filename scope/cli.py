@@ -177,14 +177,17 @@ def cmd_grep(a):
         if path.lower().endswith('.pdf'):  # a PDF the user saved from a browser (OpenReview, Preprints.org)
             out = os.path.join(db.CACHE, 'files', re.sub(r'\W', '_', pid) + '.txt')
             os.makedirs(os.path.dirname(out), exist_ok=True)
-            subprocess.run(['pdftotext', '-layout', path, out], check=False, capture_output=True)
+            subprocess.run(['pdftotext', path, out], check=False, capture_output=True)
             path, how = (out, 'pdf file') if os.path.exists(out) else (None, 'pdftotext failed')
     else:
         path, how, ver = sources.arxiv_fulltext(pid[6:], db.CACHE, want, a.refresh)
     if not path:
         print(f'{pid}: full text unavailable ({how})'); return
     con.execute("INSERT INTO reads (paper_id, paper_version, how) VALUES (?, ?, ?)", [pid, ver, how])
-    hits = grep_sections(open(path, errors='replace').read(), a.terms, a.max)
+    text = open(path, errors='replace').read()
+    if 'pdf' in how:  # PDF text wraps mid-sentence: undo hyphenation and join lines within a paragraph
+        text = re.sub(r'(?<!\n)\n(?!\n)', ' ', re.sub(r'-\n(?=[a-z])', '', text))
+    hits = grep_sections(text, a.terms, a.max)
     print(f'{pid} {ver}: {len(hits)} matching sentences ({how}); terms /{a.terms}/')
     for h, s in hits:
         print(f'  [{h}] {s[:a.width]}')

@@ -196,3 +196,10 @@ base (`bin/scope report agent-step-localization` writes them out).
 - What this pass adds over passes 1–3: OpenAlex reaches records with no arXiv copy
   (Zenodo, SSRN, theses, journals). Two of the four overlaps came only from there.
 - DBLP was tried and is not reachable (bot challenge on API and mirrors).
+
+## LTS read (T-010, 2026-11-28)
+
+OpenReview's PDF and API attachment both returned 403 again, and LTS is not on arXiv
+(title search). The owner saved the PDF to `notes/lts.pdf` (not committed); read with
+`scope grep openreview:fgfKz9Qhpx --file notes/lts.pdf`. The text is two-column and partly
+interleaved; quoted sentences were checked whole. Verdict: overlaps (S3 fails).

@@ -26,6 +26,7 @@
 | arxiv:2610.37679 Exposure Is Not Commitment: Double-Stratified Evaluation of  | yes | partly: planted injections, not a planted causal step | own internals only | no: catches unsafe actions before execution (detection) | overlaps | light |
 | openalex:W7163149144 No Better Than Behavioral: A Residual Velocity-Freezing Fing | yes | no: natural wandering, nothing planted | own residual stream vs behavioral signal | no: forecast of wandering | overlaps | light |
 | openalex:W7164739120 Felt, Not Granted: An Internal Authorization Probe Inherits  | yes | partly: adversarial deletion requests | own internals vs black-box LLM judge | no: adjudicates each proposed action | overlaps | light |
+| openreview:fgfKz9Qhpx LTS: Latent Trajectory Synthesis for Agentic Failure Attribu | yes: agent trajectories (Who&When, AgentErrorBench, TracerTraj, Jupyter-Agent, AMC/AIME-distilled, ReAct-Llama) | yes: replay validation against a known injected fault step (Table 5); training labels are decisive-step annotations | no: a fixed frozen extractor (Qwen2.5-7B-Instruct) reads trajectories produced by other agents; not the acting agent's own activations | yes: detection and localization of the injected step | overlaps | methods ARR submission PDF, saved 2026-11-28 |
 
 ## v2
 
@@ -63,5 +64,6 @@
 - **v3 arxiv:2610.37679**: S4: probes model internals to catch unsafe actions before they execute — found by OpenAlex/scope coverage pass 4
 - **v3 openalex:W7163149144**: S3: whether the residual stream carries an earlier or better detector of long-horizon agent WANDERING than the cheap probe-free tool-entropy signal — coverage pass 4; title says no better than behavioral: relevant to the obvious objection
 - **v3 openalex:W7164739120**: S3: the FROZEN direction adjudicating each proposed deletion at the tool-call token, against a black-box LLM-judge baseline — coverage pass 4; OpenAlex-only record
+- **v3 openreview:fgfKz9Qhpx**: S3: We use Qwen2.5-7B-Instruct as the frozen latent extractor in bfloat16. || S2/S4: Table 5 evaluates detection and localization against an externally specified injected step in the two replayable domains. || S1: The experiments use existing benchmarks and public datasets, including Who&When, AgentErrorBench, TracerTraj, Jupyter-Agent, AMC/AIMEdistilled, and ReAct-Llama — T-010. Resolves the last unread v3 candidate: a reader-model method like ReCast; joins the reader baselines. PDF text is two-column and partly interleaved; quotes checked as whole sentences.
 - **v2 arxiv:2610.11334**:  — after owner reversed call B (reader internals count); second read pending
 - **v1 arxiv:2611.10620**:  — first read only, no second read; superseded by v2

@@ -1,10 +1,11 @@
 # Positioning: does an agent's own computation show which step caused its decision?
 
-_Draft, 2026-11-27. One source could not be read (LTS, at the end). Everything else
-listed under "How far the search went" has been checked._
+_Draft, 2026-11-27; updated 2026-11-28 after reading the LTS submission. Everything listed
+under "How far the search went" has been checked, apart from the sources named there as
+not reached._
 
 **What I am asking you to decide.** Whether the question below is worth the work as
-stated, and whether the unread LTS submission should hold it up.
+stated.
 
 Numbers like 2607.09996 are arXiv identifiers. Names in backticks (`claim.md`,
 `verdicts.md`, `search-log.md`, `recall/`) point to my working notes, where every quote,
@@ -53,11 +54,14 @@ To count as the same work, a paper had to:
 A paper meeting all four without comparing against a reader or text still counts,
 because those comparisons are cheap to add.
 
-**Of 65 candidates, none meets all four** (`verdicts.md`). The nearest work falls into
+**Of 66 candidates, none meets all four** (`verdicts.md`). The nearest work falls into
 three groups, by what each lacks.
 
 **Planted step and step scoring, but not the agent's own internals.** ReCast (reader
-model, above). Who&When Pro (2607.09996) injects an error at a chosen step of 12,326 runs
+model, above). LTS, an anonymous ACL Rolling Review submission (OpenReview fgfKz9Qhpx),
+does the same with one fixed model: "We use Qwen2.5-7B-Instruct as the frozen latent
+extractor" over six public trajectory sets produced by other agents, and it scores
+localization against an injected fault step by replay. Who&When Pro (2607.09996) injects an error at a chosen step of 12,326 runs
 and scores LLM judges; step accuracy "falls from 94% on short traces under 3K tokens to
 50% on traces exceeding 12K tokens". DriftNet (2609.10892) recovers the injection point in
 98.7% of attacked runs in the synthetic AgentDrift corpus (2609.06972) using only text.
@@ -145,10 +149,6 @@ most of the 31 US universities with the most such papers; Berkeley and CMU are t
 forward citations of the nearest papers.
 
 Not reached:
-- **LTS** (OpenReview fgfKz9Qhpx, an anonymous ACL Rolling Review submission). It finds
-  failed steps from "cached step-level representations" and checks against injected
-  faults. If those are the acting agent's own representations, it could meet all four
-  conditions. The PDF is behind a bot check.
 - **The Aghzal et al. preprint** above (the page returned a 403).
 - Lab pages and talks of the groups swept (only their arXiv listings were checked), X,
   model system cards, and the CCS 2026 program.

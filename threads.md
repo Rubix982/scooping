@@ -76,11 +76,11 @@ Open questions that surfaced and are parked until the current card closes.
 
 ### T-010 · Does LTS use the acting agent's own representations?
 
-**Status:** blocked
+**Status:** answered
 **Parent:** T-007
 **Opened:** 2026-11-27
 **Question:** LTS (OpenReview fgfKz9Qhpx) finds failed steps from "cached step-level representations" checked against injected faults; if those are the acting agent's own, it may meet all four slots of v3. Needs the PDF saved by hand (bot check).
-**Answer:** — Blocked on the owner's browser: retried 2026-11-28, OpenReview PDF and API attachment both 403, and LTS is not on arXiv. Save https://openreview.net/pdf?id=fgfKz9Qhpx as `notes/lts.pdf`, then `bin/scope grep openreview:fgfKz9Qhpx --file notes/lts.pdf --terms "represent|hidden|cached|agent|inject"`.
+**Answer:** No. "We use Qwen2.5-7B-Instruct as the frozen latent extractor" over six public trajectory sets from other agents: a reader model, like ReCast, so it misses S3. v3 count 0 of 66, nothing unresolved (read 2026-11-28 from the PDF the owner saved).
 
 ### T-011 · Does the out-degree direction survive an OpenReview and author sweep?
 
