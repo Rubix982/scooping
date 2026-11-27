@@ -49,7 +49,11 @@ Asked 2026-11-27, answered the same day (owner's words in quotes):
   out-degree; 2609.08067 misses S3.
 - **C** was not asked: both answers leave KnowledgeSmith an overlap (no per-edit spread).
 
-**Consequence:** of 8 candidates, 0 meet all four slots of v1. 2609.08067 stays the
+**Consequence:** of 13 candidates, 0 meet all four slots of v1. 2609.08067 stays the
 nearest overlap, and its answer-entity in-degree becomes the baseline predictor that
-out-degree has to beat. This rests on a quick check (arXiv, ACL, forward citations); the
-OpenReview and author sweeps were not run.
+out-degree has to beat. After the full coverage passes (T-011, 2026-11-27: authors of the
+five nearest papers, ICLR 2027 submissions on OpenReview, OpenAlex, citations of CLaRE,
+and a screen of every unjudged hit), a second baseline joins it: Knowledge Spectrum
+(2509.17482) reports that popularity predicts edit side effects with MEMIT and AlphaEdit.
+Out-degree and popularity will be correlated, so the design has to show out-degree
+predicts spread beyond popularity and answer-entity in-degree.

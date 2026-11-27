@@ -78,7 +78,9 @@ and record those with `scope logq` and `scope add`. Run `scope <command> -h` for
 | progress, files | `scope status <slug>`, `scope report <slug>` (writes `search-log.generated.md`, `verdicts.generated.md`) |
 
 The screen regex is the main token control: write it from the slot terms. Repeat
-`--screen` to require several at once (one per slot works well). `--show` caps the lines
+`--screen` to require several at once (one per slot works well). Put word boundaries on
+short terms (`\bhubs?\b`, `\bROME\b`): unbounded, "hub" matches "github" in every
+abstract with a code link. `--show` caps the lines
 printed; `scope hits <slug> --qid N [M …] --unjudged --screen …` re-lists stored results
 later, without papers already judged, with different screens if the first were too tight.
 Never dump stored records with ad-hoc scripts; if a filter is missing, it belongs in the CLI.

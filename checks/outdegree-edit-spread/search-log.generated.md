@@ -22,3 +22,21 @@
 | 18 | 2026-11-27 23:07 | s2-cites | 2307.12976 |  | 372 | 358 | 41 | 200 |
 | 19 | 2026-11-27 23:07 | s2-cites | 2407.12828 |  | 26 | 13 | 0 | 200 |
 | 20 | 2026-11-27 23:09 | s2-cites | 2609.08067 |  | 0 | 0 | 0 | 200 |
+| 21 | 2026-11-27 23:44 | arxiv-author | Yu-Ji Zhang | since=2601 | 5 | 5 | 0 | 200 |
+| 22 | 2026-11-27 23:44 | arxiv-author | Heng Ji | since=2601 | 50 | 50 | 0 | 200 |
+| 23 | 2026-11-27 23:44 | arxiv-author | Cheng-Xiang Zhai | since=2601 | 0 | 0 | 0 | 200 |
+| 24 | 2026-11-27 23:44 | arxiv-author | Yinyi Luo | since=2601 | 16 | 15 | 2 | 200 |
+| 25 | 2026-11-27 23:45 | arxiv-author | Jindong Wang | since=2601 | 50 | 40 | 1 | 200 |
+| 26 | 2026-11-27 23:45 | arxiv-author | Roi Cohen | since=2601 | 21 | 18 | 0 | 200 |
+| 27 | 2026-11-27 23:45 | arxiv-author | Mor Geva | since=2601 | 50 | 43 | 0 | 200 |
+| 28 | 2026-11-27 23:45 | arxiv-author | Amir Globerson | since=2601 | 50 | 42 | 0 | 200 |
+| 29 | 2026-11-27 23:45 | arxiv-author | Haoben Huang | since=2601 | 1 | 0 | 0 | 200 |
+| 30 | 2026-11-27 23:45 | arxiv-author | Ou Wu | since=2601 | 50 | 50 | 0 | 200 |
+| 31 | 2026-11-27 23:45 | arxiv-author | Manit Baser | since=2601 | 11 | 7 | 0 | 200 |
+| 32 | 2026-11-27 23:45 | openreview | knowledge editing | group=ICLR.cc/2027/Conference | 100 | 97 | 32 | 200 |
+| 33 | 2026-11-27 23:45 | openreview | model editing ripple | group=ICLR.cc/2027/Conference | 100 | 47 | 7 | 200 |
+| 34 | 2026-11-27 23:45 | openreview | edit propagation | group=ICLR.cc/2027/Conference | 100 | 90 | 14 | 200 |
+| 35 | 2026-11-27 23:45 | openalex | "knowledge editing" degree | from=2025-01-01 | 1 | 1 | 1 | 200 |
+| 36 | 2026-11-27 23:46 | openalex | "knowledge editing" "ripple effect" | from=2025-01-01 | 3 | 0 | 0 | 200 |
+| 37 | 2026-11-27 23:46 | openalex | "model editing" popularity | from=2025-01-01 | 1 | 0 | 0 | 200 |
+| 38 | 2026-11-27 23:46 | s2-cites | 2603.19297 |  | 2 | 0 | 0 | 200 |

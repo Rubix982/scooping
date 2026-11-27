@@ -19,3 +19,20 @@ This was a quick check (20 logged queries, 2026-11-27), run to keep token use lo
 - No Google Scholar. No query file was written yet.
 - No lab or blog search (LessWrong, Alignment Forum).
 - Screen caveat: the `hub` term in early screens also matched "github", so those screens were loose. The final re-list used `\bhubs?\b`.
+
+## Coverage passes (T-011, 2026-11-27)
+
+Queries q24–q38 in the knowledge base (`kb/backtest.duckdb`; `scope report` writes them to
+`search-log.generated.md`).
+- People: arXiv listings since 2026-01 of 11 authors of the five nearest papers
+  (`recall/authors-nearest.txt`). Nothing on the claim.
+- Venues: OpenReview ICLR 2027 submissions, three queries (knowledge editing, model editing
+  ripple, edit propagation): 234 new records; 9 passed editing + structure + spread screens;
+  4 read by key sentences; StructKE recorded.
+- OpenAlex: three queries, 1 new record. Forward citations of CLaRE: nothing new.
+- Unjudged-hit screen over all 910 unjudged records (editing terms AND unambiguous degree or
+  popularity terms): 5 hits; Knowledge Spectrum (2509.17482) read at methods level,
+  2402.05827, PEAK (2401.17623) and 2611.04192 recorded. A first run let "hub" match
+  "github" in every abstract with a code link; rerun with `\bhubs?\b`.
+- Not reached: Google Scholar, blogs, lab pages. Knowledge Spectrum's side-effect
+  measurement was not read in full.

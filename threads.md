@@ -84,11 +84,11 @@ Open questions that surfaced and are parked until the current card closes.
 
 ### T-011 · Does the out-degree direction survive an OpenReview and author sweep?
 
-**Status:** open
+**Status:** answered
 **Parent:** T-009
 **Opened:** 2026-11-27
 **Question:** "0 of 8" for edit-slice's direction rests on arXiv, ACL and forward citations only; in-flight ICLR 2027 work and the nearest papers' authors are unchecked (slug outdegree-edit-spread).
-**Answer:** —
+**Answer:** Yes, it survives: 0 of 13 after authors, ICLR 2027 OpenReview, OpenAlex, citations and the unjudged screen. New second baseline: Knowledge Spectrum (2509.17482), popularity predicts side effects, so out-degree must add beyond popularity. `checks/outdegree-edit-spread/claim.md`.
 
 ### T-012 · Does the skill pass a second misread case?
 
