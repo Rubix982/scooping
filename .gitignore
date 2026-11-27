@@ -1,0 +1,11 @@
+# environment
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# knowledge base: the DuckDB files and cached full text of papers stay local
+kb/
+
+# private notes are never committed
+notes/

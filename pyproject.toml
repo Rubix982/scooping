@@ -1,0 +1,9 @@
+[project]
+name = "scope"
+version = "0.1.0"
+description = "Local knowledge base and CLI for scoop checks"
+requires-python = ">=3.11"
+dependencies = ["duckdb==2.0.1"]
+
+[project.scripts]
+scope = "scope.cli:main"

@@ -1,0 +1,4 @@
+#!/bin/bash
+# Wrapper: runs the scope CLI from the project venv, from any directory.
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$ROOT" && exec "$ROOT/.venv/bin/python" -m scope "$@"
