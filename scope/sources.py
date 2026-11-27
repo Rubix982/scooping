@@ -22,19 +22,25 @@ from .text import html_to_text, strip_tags
 UA = {'User-Agent': 'Mozilla/5.0 (research literature check)'}
 
 
-def _get(url, timeout=60, retries=1, wait=15):
+def _get3(url, timeout=60, retries=1, wait=15):
+    """(status, body, final URL after redirects). arXiv redirects /html/<id> to the versioned page."""
     for attempt in range(retries + 1):
         try:
             with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=timeout) as r:
-                return r.status, r.read()
+                return r.status, r.read(), r.geturl()
         except urllib.error.HTTPError as e:
             if e.code == 429 and attempt < retries:
                 time.sleep(wait); continue
-            return e.code, b''
+            return e.code, b'', url
         except Exception:
             if attempt < retries:
                 time.sleep(wait); continue
-            return 0, b''
+            return 0, b'', url
+
+
+def _get(url, timeout=60, retries=1, wait=15):
+    code, body, _ = _get3(url, timeout, retries, wait)
+    return code, body
 
 
 def _arxiv_results(page):
@@ -100,24 +106,41 @@ def arxiv_abs(aid):
             'source': 'arxiv', 'url': 'https://arxiv.org/abs/' + aid}
 
 
-def arxiv_fulltext(aid, cache_dir):
-    """Cached full text: arXiv HTML first, PDF + pdftotext as fallback. Returns (path, how)."""
-    d = os.path.join(cache_dir, 'arxiv', aid)
-    path = os.path.join(d, 'text.txt')
-    if os.path.exists(path) and os.path.getsize(path) > 1000:
-        return path, 'cache'
+def arxiv_latest_version(aid):
+    """'v3' etc., read from the abs page's og:url (citation_pdf_url carries no version); '' if not found."""
+    code, body = _get('https://arxiv.org/abs/' + aid)
+    m = re.search(r'og:url" content="[^"]*?/abs/[^"]*?(v\d+)"', body.decode('utf-8', 'replace'))
+    return m.group(1) if m else ''
+
+
+def arxiv_fulltext(aid, cache_dir, version='', refresh=False):
+    """Cached full text: arXiv HTML first, PDF + pdftotext as fallback. Returns (path, how, version).
+    With no version requested this is the latest, and the version it turned out to be is recorded
+    next to the text. Texts cached before versions were recorded get 'vN?': the latest version now,
+    which the cached copy may predate; --refresh refetches."""
+    d = os.path.join(cache_dir, 'arxiv', aid + version)
+    path, vfile = os.path.join(d, 'text.txt'), os.path.join(d, 'version.txt')
+    if not refresh and os.path.exists(path) and os.path.getsize(path) > 1000:
+        if not os.path.exists(vfile):
+            open(vfile, 'w').write(version or (arxiv_latest_version(aid) + '?'))
+        return path, 'cache', open(vfile).read().strip()
     os.makedirs(d, exist_ok=True)
-    code, body = _get('https://arxiv.org/html/' + aid)
+    code, body, final = _get3('https://arxiv.org/html/' + aid + version)
     if code == 200 and len(body) > 20000:
         open(path, 'w').write(html_to_text(body.decode('utf-8', 'replace')))
-        return path, 'html'
-    code, body = _get('https://arxiv.org/pdf/' + aid)
+        m = re.search(r'(v\d+)/?$', final)
+        v = version or (m.group(1) if m else arxiv_latest_version(aid))
+        open(vfile, 'w').write(v)
+        return path, 'html', v
+    code, body = _get('https://arxiv.org/pdf/' + aid + version)
     if code == 200 and body[:4] == b'%PDF':
         pdf = os.path.join(d, 'paper.pdf'); open(pdf, 'wb').write(body)
         subprocess.run(['pdftotext', '-layout', pdf, path], check=False, capture_output=True)
         if os.path.exists(path):
-            return path, 'pdf'
-    return None, f'failed ({code})'
+            v = version or arxiv_latest_version(aid)
+            open(vfile, 'w').write(v)
+            return path, 'pdf', v
+    return None, f'failed ({code})', ''
 
 
 def openreview_search(term, group=None, limit=100):

@@ -47,3 +47,17 @@ positioning statement.
 verbatim abstract quotes, and must not judge scoop. Verdicts are done by one reader at
 methods level. Tell recall agents where to write; if a write is blocked, do not route
 around the block — ask the user.
+
+**A correction is a claim too, and it has a version.** In the second backtest the
+project's own note said RippleBench "advertises no such pluggability". Every version of the
+paper names graph path length as a possible distance, and v2 and v3 say so outright. The
+note was trusted because it was a correction. Check a note about what a paper says the way
+you check the paper: one quoted sentence, and the version it came from. When a verdict
+turns on one sentence, grep the first version too (`scope grep <id>v1`); revisions add
+and remove claims.
+
+**Found is not judged.** In the same backtest MQuAKE, a benchmark built on the claim's exact
+variable (hop count), was in the knowledge base and never judged. Its title did not match
+the screen used at the time. Retrieval was not the weak point; screening what was already
+stored was. Before closing, screen the unjudged hits again with the object's terms and the
+variable's synonyms.

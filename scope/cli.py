@@ -170,11 +170,17 @@ def cmd_grep(a):
         print(f'{pid}: full text is only fetched for arXiv papers; for others ask the user for the PDF and use --file')
         if not a.file:
             return
-    path, how = (a.file, 'file') if a.file else sources.arxiv_fulltext(pid[6:], db.CACHE)
+    m = re.search(r'(v\d+)$', a.id.strip())
+    want = a.paper_version or (m.group(1) if m else '')
+    if a.file:
+        path, how, ver = a.file, 'file', want or 'unknown'
+    else:
+        path, how, ver = sources.arxiv_fulltext(pid[6:], db.CACHE, want, a.refresh)
     if not path:
         print(f'{pid}: full text unavailable ({how})'); return
+    con.execute("INSERT INTO reads (paper_id, paper_version, how) VALUES (?, ?, ?)", [pid, ver, how])
     hits = grep_sections(open(path, errors='replace').read(), a.terms, a.max)
-    print(f'{pid}: {len(hits)} matching sentences ({how}); terms /{a.terms}/')
+    print(f'{pid} {ver}: {len(hits)} matching sentences ({how}); terms /{a.terms}/')
     for h, s in hits:
         print(f'  [{h}] {s[:a.width]}')
 
@@ -182,11 +188,17 @@ def cmd_grep(a):
 def cmd_verdict(a):
     con = db.connect()
     pid = norm_id(a.id)
-    con.execute("INSERT OR REPLACE INTO verdicts (check_slug, version, paper_id, s1, s2, s3, s4, verdict, read_level, quotes, note) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [a.slug, a.version, pid, a.s1, a.s2, a.s3, a.s4, a.verdict, a.read, ' || '.join(a.quote or []), a.note])
+    pv = a.paper_version
+    if not pv:
+        r = con.execute("SELECT paper_version FROM reads WHERE paper_id = ? ORDER BY read_at DESC LIMIT 1", [pid]).fetchone()
+        pv = r[0] if r else ''
+    if not pv and pid.startswith('arxiv:'):
+        pv = (sources.arxiv_latest_version(pid[6:]) or '?') + ' (latest; abstract only)'
+    con.execute("INSERT OR REPLACE INTO verdicts (check_slug, version, paper_id, s1, s2, s3, s4, verdict, read_level, quotes, note, paper_version) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                [a.slug, a.version, pid, a.s1, a.s2, a.s3, a.s4, a.verdict, a.read, ' || '.join(a.quote or []), a.note, pv or None])
     db.mark_seen(con, a.slug, pid, 'verdict')
-    print(f'{a.slug} {a.version} {pid}: {a.verdict} (S1 {a.s1}, S2 {a.s2}, S3 {a.s3}, S4 {a.s4}; {a.read} read)')
+    print(f'{a.slug} {a.version} {pid}: {a.verdict} (S1 {a.s1}, S2 {a.s2}, S3 {a.s3}, S4 {a.s4}; {a.read} read of {pv or "unknown version"})')
 
 
 def cmd_seen(a):
@@ -198,9 +210,9 @@ def cmd_seen(a):
         print('not in the knowledge base'); return
     for pid, d, t in rows:
         checks = [r[0] for r in con.execute("SELECT check_slug FROM seen WHERE paper_id = ?", [pid]).fetchall()]
-        vs = con.execute("SELECT check_slug, version, verdict FROM verdicts WHERE paper_id = ?", [pid]).fetchall()
+        vs = con.execute("SELECT check_slug, version, verdict, paper_version FROM verdicts WHERE paper_id = ?", [pid]).fetchall()
         print(f'{pid} | {d or ""} | {t[:90]}\n   seen in: {", ".join(checks) or "-"}; verdicts: '
-              + ('; '.join(f'{c} {v}: {x}' for c, v, x in vs) or '-'))
+              + ('; '.join(f'{c} {v}: {x}' + (f' (read {pv})' if pv else '') for c, v, x, pv in vs) or '-'))
 
 
 def cmd_hits(a):
@@ -215,7 +227,10 @@ def cmd_hits(a):
     rows = con.execute(sql + " ORDER BY p.id DESC", args).fetchall()
     ok = screens(a.screen)
     rows = [r for r in rows if ok((r[2] or '') + ' ' + (r[3] or ''))]
-    print(f'{len(rows)} hits' + (' matching ' + ' AND '.join(f'/{x}/' for x in a.screen) if a.screen else ''))
+    if a.screen:  # titles that match more screens first: they are the likeliest near papers
+        Ps = [re.compile(x, re.I) for x in a.screen]
+        rows.sort(key=lambda r: -sum(bool(P.search(r[2] or '')) for P in Ps))
+    print(f'{len(rows)} hits' + (' matching ' + ' AND '.join(f'/{x}/' for x in a.screen) + ', title matches first' if a.screen else ''))
     for r in rows[:a.show]:
         print('  ' + short({'id': r[0], 'published': r[1], 'title': r[2]}))
 
@@ -224,9 +239,11 @@ def cmd_status(a):
     con = db.connect()
     q = con.execute("SELECT count(*), coalesce(sum(n_results),0) FROM queries WHERE check_slug = ?", [a.slug]).fetchone()
     s = con.execute("SELECT count(*) FROM seen WHERE check_slug = ?", [a.slug]).fetchone()[0]
+    j = con.execute("SELECT count(DISTINCT paper_id) FROM verdicts WHERE check_slug = ?", [a.slug]).fetchone()[0]
     v = con.execute("SELECT version, verdict, count(*) FROM verdicts WHERE check_slug = ? GROUP BY 1, 2 ORDER BY 1, 2", [a.slug]).fetchall()
     t = con.execute("SELECT count(*) FROM papers").fetchone()[0]
-    print(f"'{a.slug}': {q[0]} queries ({q[1]} results), {s} papers seen; KB holds {t} papers")
+    print(f"'{a.slug}': {q[0]} queries ({q[1]} results), {s} papers seen, {j} judged, {s - j} not judged; KB holds {t} papers")
+    print(f"  before closing: scope hits {a.slug} --unjudged --screen '<object terms>' --screen '<variable terms and synonyms>'")
     for ver, verdict, n in v:
         print(f'  {ver}: {verdict} {n}')
 
@@ -243,7 +260,7 @@ def cmd_report(a):
         f.write(f'# Search log (generated by `scope report {a.slug}`)\n\n| q | when | source | query | params | results | new | shown | HTTP |\n|---|---|---|---|---|---|---|---|---|\n')
         for r in qs:
             f.write('| ' + ' | '.join(str(x).replace('|', '/') for x in (r[0], str(r[1])[:16]) + tuple(r[2:])) + ' |\n')
-    vs = con.execute("SELECT v.version, v.paper_id, p.title, v.s1, v.s2, v.s3, v.s4, v.verdict, v.read_level, v.quotes, v.note "
+    vs = con.execute("SELECT v.version, v.paper_id, p.title, v.s1, v.s2, v.s3, v.s4, v.verdict, v.read_level, v.quotes, v.note, v.paper_version "
                      "FROM verdicts v LEFT JOIN papers p ON p.id = v.paper_id WHERE v.check_slug = ? ORDER BY v.version DESC, v.verdict, v.paper_id",
                      [a.slug]).fetchall()
     with open(os.path.join(d, 'verdicts.generated.md'), 'w') as f:
@@ -253,7 +270,7 @@ def cmd_report(a):
             if r[0] != cur:
                 cur = r[0]
                 f.write(f'\n## {cur}\n\n| Paper | S1 | S2 | S3 | S4 | Verdict | Read |\n|---|---|---|---|---|---|---|\n')
-            f.write(f'| {r[1]} {(r[2] or "")[:60]} | {r[3]} | {r[4]} | {r[5]} | {r[6]} | {r[7]} | {r[8]} |\n')
+            f.write(f'| {r[1]} {(r[2] or "")[:60]} | {r[3]} | {r[4]} | {r[5]} | {r[6]} | {r[7]} | {r[8]}{(" " + r[11]) if r[11] else ""} |\n')
         f.write('\n## Quotes and notes\n\n')
         for r in vs:
             if r[9] or r[10]:
@@ -321,6 +338,8 @@ def main(argv=None):
     g = sub.add_parser('grep', help='sentences in the full text matching slot terms, with section headings')
     g.add_argument('id'); g.add_argument('--terms', required=True); g.add_argument('--max', type=int, default=8)
     g.add_argument('--width', type=int, default=300); g.add_argument('--file', help='local text file instead of fetching')
+    g.add_argument('--paper-version', help="read a specific arXiv version, e.g. v1 (or write the id as 2512.04144v1); default: latest")
+    g.add_argument('--refresh', action='store_true', help='refetch even if cached (a newer version may exist)')
     g.set_defaults(f=cmd_grep)
 
     v = sub.add_parser('verdict', help='record a verdict for one paper under one claim version')
@@ -330,6 +349,7 @@ def main(argv=None):
     v.add_argument('--verdict', required=True, choices=['same', 'overlaps', 'different'])
     v.add_argument('--read', default='methods', choices=['methods', 'light'])
     v.add_argument('--quote', action='append', help='"S2: copied sentence" (repeatable)'); v.add_argument('--note')
+    v.add_argument('--paper-version', help='version the verdict rests on; default: the last `scope grep` of this paper')
     v.set_defaults(f=cmd_verdict)
 
     se = sub.add_parser('seen', help='is a paper (id or title fragment) already in the knowledge base?'); se.add_argument('query')

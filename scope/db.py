@@ -3,7 +3,8 @@
 Paper ids are prefixed by where the canonical record lives: arxiv:2610.11334,
 openreview:fgfKz9Qhpx, s2:<paperId>, scholar:<hash>. The papers / authors / paper_authors
 tables follow the design brief (scope-tool-brainstorm.md §5); queries, seen and verdicts
-are what a scoop check adds.
+are what a scoop check adds. `reads` records which paper version each full-text read
+saw, and each verdict carries that version (`paper_version`), because revisions change what a paper says.
 """
 import os
 import re
@@ -39,13 +40,19 @@ CREATE TABLE IF NOT EXISTS verdicts (
   verdict TEXT, read_level TEXT, quotes TEXT, note TEXT,
   decided_at TIMESTAMP DEFAULT current_timestamp,
   PRIMARY KEY (check_slug, version, paper_id));
+CREATE TABLE IF NOT EXISTS reads (
+  paper_id TEXT, paper_version TEXT, how TEXT, read_at TIMESTAMP DEFAULT current_timestamp);
 """
+# Added after the first release; ALTER keeps existing knowledge bases working.
+MIGRATIONS = "ALTER TABLE verdicts ADD COLUMN IF NOT EXISTS paper_version TEXT;"
+
 
 
 def connect():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     con = duckdb.connect(DB_PATH)
     con.execute(SCHEMA)
+    con.execute(MIGRATIONS)
     return con
 
 

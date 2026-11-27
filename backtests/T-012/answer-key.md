@@ -33,9 +33,12 @@ Check 2 was wrong, and so is the edit-slice correction it was built from. Ripple
 knowledge-graph path length as one option, four times in v3: "The framework is agnostic
 to the choice of distance function: knowledge-graph path length is one valid
 instantiation, but so are RAG rank and embedding cosine similarity" (§2), and again in
-§3.1, §3.2 and the conclusion. v1 (3 Dec 2025) mentions path length once, without the
-pluggability wording. The edit-slice correction is dated 2026-10-03, after v3, so it
-misread the current version (or read v1). What the paper does not do is run path length:
+§3.1, §3.2 and the conclusion. Even v1 (3 Dec 2025) says "semantic distance can be
+instantiated in many ways; for example, via embedding-space similarity, path length in a
+knowledge graph, or as the rank position of responses returned by a RAG system" (§3.1).
+So the edit-slice correction (2026-10-03) was wrong for every version. *(Amended the same
+day: this paragraph first said v1 lacked the wording; reading v1 through `scope grep
+2512.04144v1` showed it does not.)* What the paper does not do is run path length:
 "We use cosine similarity of bge-base embeddings as our default distance" (§3.3). The
 right reading, which the test session gave: the option is named, never run, and the
 evaluated methods are topic unlearning, not single-fact edits. The original note was half

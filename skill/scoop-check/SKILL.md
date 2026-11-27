@@ -35,6 +35,7 @@ query and verdict.
 | Verdicts | methods reads for the nearest few, light reads for the rest | methods reads for every close candidate, and a second read for any "same" |
 | Boundary calls handed to the user | yes | yes |
 | Restate on a match | yes | yes |
+| Screen found-but-unjudged papers before closing | yes | yes |
 | Positioning statement, legibility census | no; the closing message carries the result | yes |
 | Rough size | the T-008 backtest: about 20 queries, 7 minutes | whatever coverage needs |
 
@@ -71,7 +72,7 @@ and record those with `scope logq` and `scope add`. Run `scope <command> -h` for
 | Google Scholar | user pastes pages under `## N` headings → `scope search scholar <slug> <file>` |
 | already known? | `scope seen "<id or title fragment>"` (shows verdicts from any check) |
 | abstract, key sentences | `scope abstract <ids…> --terms "<slot regex>"` |
-| methods read | `scope grep <id> --terms "<slot regex>" --max 8` (cached full text, with section headings; appendices included) |
+| methods read | `scope grep <id> --terms "<slot regex>" --max 8` (cached full text, with section headings; appendices included; records the arXiv version read, `<id>v1` for an older one) |
 | record a verdict | `scope verdict <slug> <id> --version vN --s1 … --s4 … --verdict same\|overlaps\|different --read methods\|light --quote "S2: …"` |
 | outside finds | `scope add <slug> --title … --url …`, `scope logq <slug> --source websearch --query … --n …` |
 | progress, files | `scope status <slug>`, `scope report <slug>` (writes `search-log.generated.md`, `verdicts.generated.md`) |
@@ -117,7 +118,8 @@ mode, run it inline within the budget in the table above.
 ### 3. Verdicts from methods sections
 
 For each close candidate, `scope grep` its full text with the slot terms and take one
-quoted sentence per slot. Record it with `scope verdict`. Verdicts are "same" (all four
+quoted sentence per slot. Record it with `scope verdict`, which stores the version of the
+text you read. Verdicts are "same" (all four
 slots, in the same experiment, then a second read), "overlaps" (record which slots and
 why), or "different". A light read (abstract plus a keyword grep) can only produce
 "overlaps". Grep before reading: most verdicts need a handful of sentences, not a paper.
@@ -167,6 +169,13 @@ work must beat, and ends with scoop risk and unreached sources. Then run the
 `research-legibility` census on it.
 
 ## Closing a check
+
+First, screen what was found but never judged:
+`scope hits <slug> --unjudged --screen "<object terms>" --screen "<variable terms and
+synonyms>"`. Write the variable screen wide (for a distance variable: hop, multi-hop,
+path, distance, neighbour). Judge every hit that names both, even if only to record
+"different", and note the pass in `search-log.md`. `scope status` shows how many papers
+are still unjudged.
 
 The card closes with a number: "Of N candidates, K meet all four slots of claim C vN."
 Run `scope report <slug>`, update `threads.md`, and tell the user, in this order: the

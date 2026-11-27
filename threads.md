@@ -108,24 +108,24 @@ Open questions that surfaced and are parked until the current card closes.
 
 ### T-014 · Edit-slice's RippleBench correction is itself wrong
 
-**Status:** open
+**Status:** answered
 **Parent:** T-012
 **Opened:** 2026-11-27
 **Question:** The 2026-10-03 correction says RippleBench "advertises no such pluggability"; v2 and v3 name knowledge-graph path length as a pluggable distance (never run). Fix the entry in `~/code/open-concept-lab/ai/edit-slice/CLAUDE.md`? Needs the owner's OK (other project).
-**Answer:** —
+**Answer:** Done 2026-11-27: dated correction appended to the RippleBench entry in edit-slice's CLAUDE.md (every version names path length; none runs it). Uncommitted in open-concept-lab.
 
 ### T-015 · Should `scope` record which paper version a verdict read?
 
-**Status:** open
+**Status:** answered
 **Parent:** T-012
 **Opened:** 2026-11-27
 **Question:** The full-text cache and verdicts store no arXiv version, and in T-012 the version decided the answer (v1 lacks the wording v2/v3 have). Record the version at fetch time and in each verdict?
-**Answer:** —
+**Answer:** Yes, done: `scope grep` records the arXiv version read (`reads` table, `version.txt` beside cached text; `<id>v1` reads an older one); verdicts store `paper_version`, shown in `seen` and reports.
 
 ### T-016 · How should a check catch retrieved-but-unjudged near papers?
 
-**Status:** open
+**Status:** answered
 **Parent:** T-012
 **Opened:** 2026-11-27
 **Question:** MQuAKE was in the T-012 KB but never judged; should closing a check require a pass over `scope hits --unjudged` with the slot screens?
-**Answer:** —
+**Answer:** Yes, done: the skill's closing step screens `scope hits --unjudged` with object terms and wide variable synonyms; `scope status` shows the unjudged count; lesson added to judgment.md.
