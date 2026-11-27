@@ -1,0 +1,17 @@
+Quick check for myself before I build on this.
+
+The direction: after a single-fact weight edit (ROME, MEMIT and similar), measure how the
+edit's effect on other facts falls off with their graph path length from the edited fact,
+in a typed dependency graph. First a knowledge graph of facts; later I want to swap in a
+code dependency graph. The independent variable is path length in hops from the edited
+fact. The outcome is how much each related fact's answer changes, unintended changes
+included.
+
+Earlier I wrote myself a note that RippleBench (arXiv 2512.04144) already produces
+distance-stratified ripple curves with a pluggable distance function, including graph path
+length, so swapping in a code dependency graph is a drop-in and the highest-leverage move.
+If that note is right, is my direction already done, or just an extension of their tool?
+
+Use the scoop-check skill, with the slug pathlength-edit-spread. Work only in the check
+folder the skill creates. Do not open anything under ~/code/open-concept-lab or any other
+project folder; those hold my old notes and I want an independent answer. Keep token use low.
