@@ -100,8 +100,8 @@ Open questions that surfaced and are parked until the current card closes.
 
 ### T-013 · Does the skill need a quick mode for checks only the owner reads?
 
-**Status:** open
+**Status:** answered
 **Parent:** T-008
 **Opened:** 2026-11-27
 **Question:** For self use the skill still ends in positioning.md plus a legibility census; the backtest's quick check reached the right answer in 7.4 min for $1.52 without them. Should those steps run only when someone else will read the result?
-**Answer:** —
+**Answer:** Yes. The skill now runs quick by default when only the owner reads the result (12–20 queries, three sources, one citation hop, no positioning or census) and full when someone else will; verdict rules are identical in both. `skill/scoop-check/SKILL.md`, "Quick or full".

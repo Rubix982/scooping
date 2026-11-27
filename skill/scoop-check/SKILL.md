@@ -1,6 +1,6 @@
 ---
 name: scoop-check
-description: Decide whether a research direction has already been done ("scooped"), with evidence an advisor or reviewer can check, and record the thinking that leads to a restated direction. Use whenever the user asks "has this been done", "am I scooped", "is this novel", "check prior art for my idea", "who else is working on this", wants a novelty or positioning statement for advisors, reviewers or a proposal, finds a paper that might take their idea, or wants to restate a direction after overlapping work turns up. Built for mechanistic interpretability and ML research, but the procedure is field-agnostic. Runs a claim-as-slots check through the local `scope` knowledge-base CLI: logged searches, methods-level verdicts, an asymmetric rule (an unverified match is grounds to verify, never to shelve), boundary calls handed to the user, restatement, and a positioning statement.
+description: Decide whether a research direction has already been done ("scooped"), with evidence an advisor or reviewer can check, and record the thinking that leads to a restated direction. Use whenever the user asks "has this been done", "am I scooped", "is this novel", "check prior art for my idea", "who else is working on this", wants a novelty or positioning statement for advisors, reviewers or a proposal, finds a paper that might take their idea, or wants to restate a direction after overlapping work turns up. Built for mechanistic interpretability. Defaults to a quick check when only the user will read the result, and runs the full procedure (coverage passes, positioning statement) when advisors, reviewers or a proposal will. Runs a claim-as-slots check through the local `scope` knowledge-base CLI: logged searches, methods-level verdicts, an asymmetric rule (an unverified match is grounds to verify, never to shelve), boundary calls handed to the user, and restatement.
 ---
 
 # Scoop check
@@ -18,6 +18,34 @@ Two failures it exists to prevent, both seen in real projects:
 
 The rule between them: **shelving needs stronger evidence than proceeding.** An unverified
 match is grounds to verify, never to shelve.
+
+## Quick or full: decided by who reads the result
+
+Most checks are for the user alone: is this idea already taken, before a week goes into
+it? Those run **quick**. A check whose result someone else will read (advisors, reviewers,
+a proposal, a related-work section) runs **full**. Decide from the request. If it names no
+other reader, run quick and say so in the first line of the closing message. A quick check
+can be upgraded to full later under the same slug, since the knowledge base keeps every
+query and verdict.
+
+| | Quick | Full |
+|---|---|---|
+| Claim as slots, both outcomes, before searching | yes | yes |
+| Recall | 12–20 queries over at least three sources (arXiv, OpenAlex, and ACL or OpenReview), plus forward citations of the nearest one or two papers | sliced recall, possibly delegated, then every coverage pass in step 6 |
+| Verdicts | methods reads for the nearest few, light reads for the rest | methods reads for every close candidate, and a second read for any "same" |
+| Boundary calls handed to the user | yes | yes |
+| Restate on a match | yes | yes |
+| Positioning statement, legibility census | no; the closing message carries the result | yes |
+| Rough size | the T-008 backtest: about 20 queries, 7 minutes | whatever coverage needs |
+
+The rules that decide a verdict are the same in both modes: the asymmetry rule, the
+same-experiment rule, a methods quote for every slot before "same", and boundary calls
+handed to the user. Quick mode saves time by searching less, never by judging more
+loosely. So a quick check ends with "open on a quick check" and a list of what it skipped,
+never with "nobody has done this".
+
+Forward citations are in quick mode because in the backtest the nearest paper turned up
+only among the citers of an older one; keyword search missed it.
 
 ## The knowledge base does the searching
 
@@ -82,9 +110,9 @@ in flight). One `scope search` per query, each with a screen built from the slot
 Note sources you could not reach in `search-log.md` under Gaps as you go. What works at
 each source and what fails: `references/sources.md`.
 
-Recall can be delegated to subagents, one per slice, if they also use `scope` with the same
-slug. Tell them not to judge scoop, and where to write. Recall is the expensive part; for
-a quick check, a dozen sharp queries inline is often enough to find the nearest work.
+In full mode, recall can be delegated to subagents, one per slice, if they also use
+`scope` with the same slug. Tell them not to judge scoop, and where to write. In quick
+mode, run it inline within the budget in the table above.
 
 ### 3. Verdicts from methods sections
 
@@ -111,7 +139,9 @@ is a comparison ("X versus Y"), a paper doing X alone still counts when adding Y
 Then repeat steps 3–4 under the new version (`--version v2`, …); the KB keeps everything
 already seen.
 
-### 6. Coverage passes before any "nobody has done this" sentence
+### 6. Coverage passes before any "nobody has done this" sentence (full mode)
+
+In quick mode, skip this step and list each pass under what was not reached.
 
 Keyword search misses vocabulary. Before the statement goes out, add:
 - **people:** authors of the nearest papers, plus labs found from data (`scope census`, by
@@ -125,7 +155,9 @@ Keyword search misses vocabulary. Before the statement goes out, add:
 
 Say plainly what was not reached.
 
-### 7. The positioning statement
+### 7. The positioning statement (full mode)
+
+In quick mode, skip this; the closing message carries the result.
 
 Write `positioning.md` only after a card closes. Skeleton in `references/templates.md`.
 It opens with what the reader is asked to decide, tells how the question got here (each
@@ -138,7 +170,9 @@ work must beat, and ends with scoop risk and unreached sources. Then run the
 
 The card closes with a number: "Of N candidates, K meet all four slots of claim C vN."
 Run `scope report <slug>`, update `threads.md`, and tell the user, in this order: the
-count, what it rests on, what is unread, numbered next steps with a recommendation.
+count, what it rests on (including any boundary call, as a plain question), what is
+unread, numbered next steps with a recommendation. A quick check opens the message with
+"Quick check:" and, when the direction is still open, offers the full passes as a next step.
 
 ## Judgment notes
 
